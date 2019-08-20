@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ace.turtle.mapper.StudentsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ace.turtle.model.StudentsModel">
+        <id column="id" property="id" />
+        <result column="stu_name" property="stuName" />
+        <result column="sex" property="sex" />
+        <result column="age" property="age" />
+        <result column="school" property="school" />
+        <result column="score" property="score" />
+        <result column="course" property="course" />
+        <result column="stage" property="stage" />
+        <result column="gmt_create" property="gmtCreate" />
+    </resultMap>
+
+	<select id="getAll" resultMap="BaseResultMap">
+	select * from students
+	</select>
+	<insert id="insert">
+		insert into students (stu_name,sex,age,school,score,course,stage,gmt_create) 
+		values(#{stuName},#{sex},#{age},#{school},#{score},#{course},#{stage},#{gmt_create})
+	</insert>
+	<select id="getAvg" resultType="com.ace.turtle.common.view.StuAvgModel">
+		select num,course,avg(score) avgScore from students group by num,course
+	</select>
+	<select id="getByCourseNum" resultType="com.ace.turtle.common.view.StageScoreModel">
+		select stage,score from students where num=#{num} and course=#{course}
+	</select>
+	<select id="getByNum" resultType="string">
+		select stu_name from students where num=#{num} limit 1
+	</select>
+</mapper>

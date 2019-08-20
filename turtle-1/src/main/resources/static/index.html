@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    
+    <style>
+        .resultTable{
+		    border-collapse:separate;
+		    border-spacing:0 10px;
+        }
+        .resultTable tr{
+            height:46px;
+            border-radius: 4px;
+            box-shadow: 0 0 10px 8px #f5f8ff;
+        }
+    
+    </style>
+    <script>
+    $(document).ready(function(){
+        getdata();
+    })
+
+    function getdata(){
+    $.ajax({
+    type: 'post',
+    dataType: "json",
+    url: "../student/detail",
+    
+    success: function (data) {
+        if(data.success){
+
+            var tableStr="";
+            var score= data.data;
+            if(score.length!=0){
+                for(var i=0;i<score.length;i++){
+                	 tableStr += "<tr>"+
+					                     "<td>" +score[i].num+"</td>"+
+					                     "<td>" +score[i].name+"</td>"+
+					                     "<td><div id ='"+score[i].num+"'>" +score[i].avgScore+"</div></td>"+
+					                     "<td>" +score[i].courseStr+"</td>"+
+                				 "</tr>" ;
+
+                }
+                $("#sctable tbody").html(tableStr);
+            }
+            
+            //hover事件
+            /* $("#sctable tbody tr td").hover(function (){
+            	var thistr=this;
+                if(thistr.cellIndex==2){
+                   var trnum= thistr.parentElement.children[0].innerHTML;
+                   var trname= thistr.parentElement.children[3].innerHTML;
+                   var divStr="<div id='de' style='position:absolute;z-index=2'>";
+
+                   if(score.length!=0){
+                    	  for(var i=0;i<score.length;i++){
+                         	if(trnum==score[i].num&&trname==score[i].courseStr){
+                                divStr+="<table id='detable'> <thead> </head><tbody>";
+                         	    var de=	score[i].stageScore;
+                                 for (var j=0;j<de.length;j++){
+                                    if(de[j].stage==1){
+                                        divStr+="<tr>"+
+                                            "<td>"+"入学"+"</td>"+
+                                            "<td>"+de[j].score+"</td>"+
+                                            "</tr>";
+                                    }else if(de[j].stage==2){
+                                        divStr+="<tr>"+
+                                            "<td>"+"期中"+"</td>"+
+                                            "<td>"+de[j].score+"</td>"+
+                                            "</tr>";
+                                    }else if(de[j].stage==3){
+                                        divStr+="<tr>"+
+                                            "<td>"+"期末"+"</td>"+
+                                            "<td>"+de[j].score+"</td>"+
+                                            "</tr>";
+                                    }
+                                   
+                                 }
+                         		
+                                 divStr+= "</tbody></table>";
+                                
+                         	}
+                        divStr+="</div>";
+                        $("#"+trnum).append(divStr);
+                        $("#de").css("z-index",3);
+                          }
+                   }
+
+               }
+            },function(){
+            	$("#de").remove();
+            	$("#de").remove();
+            	
+            }); */
+
+        }
+
+        
+    }
+    });
+    }
+    </script>
+</head>
+<body>
+    <div id="sc" style="z-index:1">
+        <table id="sctable" >
+            <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>姓名</th>
+                    <th>平均分</th>
+                    <th>课程名</th>
+                </tr>
+
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+</body>
+</html>
